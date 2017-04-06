@@ -13,6 +13,18 @@
     tools:context="melina.weatherref.MainActivity"
     android:background="#FC970B">
 
+    <TextView
+        android:text="--"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/temperatureLabel"
+        android:textSize="120sp"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="170dp"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,7 +47,7 @@
         android:layout_marginBottom="100dp" />
 
     <TextView
-        android:text="At 5:00 pm it will be"
+        android:text="..."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
@@ -44,18 +56,6 @@
         android:layout_below="@+id/iconImageView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="37dp" />
-
-    <TextView
-        android:text="100"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/temperatureLabel"
-        android:textSize="120sp"
-        android:textColor="@android:color/white"
-        android:layout_marginTop="215dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/locationLabel"
-        android:layout_alignStart="@+id/locationLabel" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -69,6 +69,7 @@
         android:layout_marginStart="16dp" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -94,11 +95,10 @@
                 android:textColor="#80ffffff" />
 
             <TextView
-                android:text="HUMIDITY"
+                android:text="--"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/humidityValue"
-                tools:text="0.88"
                 android:textColor="@android:color/white"
                 android:textSize="24sp" />
         </LinearLayout>
@@ -110,38 +110,36 @@
             android:layout_weight="50">
 
             <TextView
-                android:text="TextView"
+                android:text="RAIN/SNOW?"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/precipLabel"
-                android:textColor="#80ffffff"
-                tools:text="RAIN/SNOW?" />
+                android:textColor="#80ffffff" />
 
             <TextView
-                android:text="TextView"
+                android:text="--%"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/precipValue"
                 android:textColor="#ffffff"
-                android:textSize="24sp"
-                tools:text="100%" />
+                android:textSize="24sp" />
 
         </LinearLayout>
 
     </LinearLayout>
 
     <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:text="Getting current weather..."
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView8"
-        android:layout_marginBottom="150dp"
         android:textColor="@android:color/white"
-        tools:text="Summary"
+        android:layout_below="@+id/linearLayout"
+        android:layout_marginTop="20dp"
         android:textSize="18sp"
-        android:gravity="center_horizontal" />
+        android:gravity="center_horizontal"
+        android:id="@+id/summaryLabel" />
 
 </RelativeLayout>
 

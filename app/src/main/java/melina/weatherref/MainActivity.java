@@ -1,6 +1,7 @@
 package melina.weatherref;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -19,6 +22,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -31,10 +36,18 @@ public class MainActivity extends AppCompatActivity {
 
     private CurrentWeather mCurrentWeather;
 
+    @BindView(R.id.temperatureLabel) TextView mTemperatureLabel;
+    @BindView(R.id.timeLabel) TextView mTimeLabel;
+    @BindView(R.id.humidityValue) TextView mHumidityValue;
+    @BindView(R.id.precipValue) TextView mPrecipValue;
+    @BindView(R.id.summaryLabel) TextView mSummaryLabel;
+    @BindView(R.id.iconImageView) ImageView mIconImageView;
+    @BindView(R.id.locationLabel) TextView mLocationLabel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         String apiKey = "5e6341360efc908f10e68e3009aab0ec";
         double latitude = 37.8267;
@@ -62,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
                             mCurrentWeather = getCurrentDetails(jsonData);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    UpdateDisplay();
+                                }
+                            });
                         } else {
                             alertUserAboutError();
                         }
@@ -79,6 +98,17 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "Main UI code is running!");
 
+    }
+
+    private void UpdateDisplay() {
+        mTemperatureLabel.setText(mCurrentWeather.getTemperature() + "");
+        mTimeLabel.setText("At " + mCurrentWeather.getFormattedTime() + " it will be");
+        mHumidityValue.setText(mCurrentWeather.getHumidity() + "");
+        mPrecipValue.setText(mCurrentWeather.getPrecipChance() + "%");
+        mSummaryLabel.setText(mCurrentWeather.getSummary());
+
+        Drawable drawable = getResources().getDrawable(mCurrentWeather.getIconId());
+        mIconImageView.setImageDrawable(drawable);
     }
 
     private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
