@@ -95,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
         currentWeather.setPrecipChance(currenly.getDouble("precipProbability"));
         currentWeather.setSummary(currenly.getString("summary"));
         currentWeather.setTemperature(currenly.getDouble("temperature"));
+        currentWeather.setTimeZone(timezone);
+
+        Log.d(TAG, currentWeather.getFormattedTime());
 
         return currentWeather;
     }
