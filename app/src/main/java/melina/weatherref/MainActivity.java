@@ -3,6 +3,8 @@ package melina.weatherref;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -29,6 +31,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private LocationManager mLocationManager = null;
     private LocationRequest mLocationRequest = null;
     private Location location = null;
+    private String cityName = null;
 
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
@@ -84,10 +89,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        getForecast();
-
         Log.d(TAG, "Main UI code is running!");
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -114,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             if (location != null) {
                 double latitude = location.getLatitude();
                 double longtitude = location.getLongitude();
+
+                getCityName();
 
                 String apiKey = "5e6341360efc908f10e68e3009aab0ec";
                 String forecastUrl = "https://api.darksky.net/forecast/" + apiKey +
@@ -192,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mHumidityValue.setText(mCurrentWeather.getHumidity() + "");
         mPrecipValue.setText(mCurrentWeather.getPrecipChance() + "%");
         mSummaryLabel.setText(mCurrentWeather.getSummary());
+        if (cityName != null) mLocationLabel.setText(cityName);
 
         Drawable drawable = getResources().getDrawable(mCurrentWeather.getIconId());
         mIconImageView.setImageDrawable(drawable);
@@ -281,6 +294,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         this.location = location;
         if (this.location != null) {
             getForecast();
+        }
+    }
+
+    private void getCityName() {
+        if (location != null) {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+            }
+
+            if (addresses.size() > 0) {
+                Address address = addresses.get(0);
+                cityName = address.getLocality();
+            }
         }
     }
 
