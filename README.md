@@ -1,5 +1,4 @@
 # WeatherRef
-Android, Java
 An Android application which adopts MVC pattern and supports showing the local weather.
 
 ### Demo
