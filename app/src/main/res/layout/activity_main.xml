@@ -36,7 +36,7 @@
         android:layout_marginTop="12dp" />
 
     <TextView
-        android:text="Mountain View, CA"
+        android:text="City"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/locationLabel"
