@@ -91,7 +91,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/humidityLabel"
-                android:textColor="#80ffffff" />
+                android:textColor="#80ffffff"
+                android:gravity="center_horizontal" />
 
             <TextView
                 android:text="--"
@@ -99,7 +100,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/humidityValue"
                 android:textColor="@android:color/white"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:gravity="center_horizontal" />
         </LinearLayout>
 
         <LinearLayout
@@ -113,7 +115,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/precipLabel"
-                android:textColor="#80ffffff" />
+                android:textColor="#80ffffff"
+                android:gravity="center_horizontal" />
 
             <TextView
                 android:text="--%"
@@ -121,7 +124,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/precipValue"
                 android:textColor="#ffffff"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:gravity="center_horizontal" />
 
         </LinearLayout>
 
@@ -140,23 +144,23 @@
         android:gravity="center_horizontal"
         android:id="@+id/summaryLabel" />
 
-    <ImageView
+    <!--ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/refresh"
         android:layout_above="@+id/iconImageView"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="22dp"
-        android:id="@+id/refreshImageView" />
+        android:id="@+id/refreshImageView" /-->
 
     <ProgressBar
         style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/timeLabel"
-        android:layout_alignStart="@+id/timeLabel" />
+        android:layout_above="@+id/iconImageView"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true" />
 
 </RelativeLayout>
 

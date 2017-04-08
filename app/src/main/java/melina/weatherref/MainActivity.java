@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @BindView(R.id.summaryLabel) TextView mSummaryLabel;
     @BindView(R.id.iconImageView) ImageView mIconImageView;
     @BindView(R.id.locationLabel) TextView mLocationLabel;
-    @BindView(R.id.refreshImageView) ImageView mRefreshImageView;
+    //@BindView(R.id.refreshImageView) ImageView mRefreshImageView;
     @BindView(R.id.progressBar) ProgressBar mProgressbar;
 
     @Override
@@ -82,12 +82,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .build();
         mGoogleApiClient.connect();
 
-        mRefreshImageView.setOnClickListener(new View.OnClickListener() {
+        /*mRefreshImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getForecast();
             }
-        });
+        });*/
 
         Log.d(TAG, "Main UI code is running!");
 
@@ -191,10 +191,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private void toggleRefresh() {
         if (mProgressbar.getVisibility() == View.INVISIBLE) {
             mProgressbar.setVisibility(View.VISIBLE);
-            mRefreshImageView.setVisibility(View.INVISIBLE);
+            //mRefreshImageView.setVisibility(View.INVISIBLE);
         } else {
             mProgressbar.setVisibility(View.INVISIBLE);
-            mRefreshImageView.setVisibility(View.VISIBLE);
+            //mRefreshImageView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -271,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     protected void startLocationUpdates() {
+        Log.i(TAG, "In startLocationUpdates");
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL)
@@ -286,6 +287,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(this, LOCATION_PERMISSIONS, LOCATION_REQUEST_CODE);
             return;
+        } else {
+
+            try {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                        mLocationRequest, this);
+            } catch (SecurityException ex) {
+                Log.e(TAG, ex.getMessage());
+            }
         }
     }
 
@@ -295,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (this.location != null) {
             getForecast();
         }
+        Log.e(TAG, "location: " + location.toString());
     }
 
     private void getCityName() {
@@ -325,6 +335,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     Log.e(TAG, ex.getMessage());
                 }
             } else {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
                 Log.w(TAG, "Location permissions not granted.");
             }
         } else {
