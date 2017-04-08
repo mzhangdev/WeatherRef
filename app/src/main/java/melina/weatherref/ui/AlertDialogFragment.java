@@ -1,10 +1,12 @@
-package melina.weatherref;
+package melina.weatherref.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+
+import melina.weatherref.R;
 
 /**
  * Created by melina on 4/5/17.

@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="melina.weatherref.MainActivity"
+    tools:context="melina.weatherref.ui.MainActivity"
     android:background="#FC970B">
 
     <TextView
@@ -92,16 +92,18 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/humidityLabel"
                 android:textColor="#80ffffff"
-                android:gravity="center_horizontal" />
+                android:gravity="center_horizontal"
+                android:textAlignment="center"/>
 
             <TextView
-                android:text="--"
+                android:text="--%"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/humidityValue"
                 android:textColor="@android:color/white"
                 android:textSize="24sp"
-                android:gravity="center_horizontal" />
+                android:gravity="center_horizontal"
+                android:textAlignment="center"/>
         </LinearLayout>
 
         <LinearLayout

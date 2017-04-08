@@ -1,8 +1,10 @@
-package melina.weatherref;
+package melina.weatherref.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+
+import melina.weatherref.R;
 
 /**
  * Created by melina on 4/5/17.
@@ -90,6 +92,10 @@ public class CurrentWeather {
 
     public double getHumidity() {
         return mHumidity;
+    }
+
+    public int getHumidityPercentage() {
+        return (int)Math.round(mHumidity * 100);
     }
 
     public void setHumidity(double humidity) {

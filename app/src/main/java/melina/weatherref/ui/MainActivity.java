@@ -1,4 +1,4 @@
-package melina.weatherref;
+package melina.weatherref.ui;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -27,6 +27,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,6 +37,11 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import melina.weatherref.R;
+import melina.weatherref.model.CurrentWeather;
+import melina.weatherref.model.DayData;
+import melina.weatherref.model.Forecast;
+import melina.weatherref.model.HourData;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -46,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    private CurrentWeather mCurrentWeather;
+    private Forecast mForecast;
     private GoogleApiClient mGoogleApiClient;
     private LocationManager mLocationManager = null;
     private LocationRequest mLocationRequest = null;
@@ -162,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             String jsonData = response.body().string();
                             Log.v(TAG, jsonData);
                             if (response.isSuccessful()) {
-                                mCurrentWeather = getCurrentDetails(jsonData);
+                                mForecast = parseForecastDetails(jsonData);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -199,15 +205,68 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     private void UpdateDisplay() {
-        mTemperatureLabel.setText(mCurrentWeather.getTemperature() + "");
-        mTimeLabel.setText("At " + mCurrentWeather.getFormattedTime() + " it will be");
-        mHumidityValue.setText(mCurrentWeather.getHumidity() + "");
-        mPrecipValue.setText(mCurrentWeather.getPrecipChance() + "%");
-        mSummaryLabel.setText(mCurrentWeather.getSummary());
+        CurrentWeather currentWeather = mForecast.getCurrentWeather();
+        mTemperatureLabel.setText(currentWeather.getTemperature() + "");
+        mTimeLabel.setText("At " + currentWeather.getFormattedTime() + " it will be");
+        mHumidityValue.setText(currentWeather.getHumidityPercentage() + "%");
+        mPrecipValue.setText(currentWeather.getPrecipChance() + "%");
+        mSummaryLabel.setText(currentWeather.getSummary());
         if (cityName != null) mLocationLabel.setText(cityName);
 
-        Drawable drawable = getResources().getDrawable(mCurrentWeather.getIconId());
+        Drawable drawable = getResources().getDrawable(currentWeather.getIconId());
         mIconImageView.setImageDrawable(drawable);
+    }
+
+    private Forecast parseForecastDetails(String jsonData) throws JSONException {
+        Forecast forecast = new Forecast();
+
+        forecast.setCurrentWeather(getCurrentDetails(jsonData));
+        forecast.setHourDatas(getHourDetails(jsonData));
+        forecast.setDayDatas(getDayDetails(jsonData));
+
+        return forecast;
+    }
+
+    private DayData[] getDayDetails(String jsonData) throws JSONException{
+        JSONObject forecast = new JSONObject(jsonData);
+        String timezone = forecast.getString("timezone");
+
+        JSONObject daily = forecast.getJSONObject("daily");
+        JSONArray daydatas = daily.getJSONArray("data");
+
+        DayData[] days = new DayData[daydatas.length()];
+        for (int i = 0; i < daydatas.length(); i++) {
+            JSONObject jsonDay = daydatas.getJSONObject(i);
+            DayData dayData = new DayData();
+            dayData.setSummary(jsonDay.getString("summary"));
+            dayData.setTemperature(jsonDay.getDouble("temperatureMax"));
+            dayData.setIcon(jsonDay.getString("icon"));
+            dayData.setTime(jsonDay.getLong("time"));
+            dayData.setSummary(timezone);
+            days[i] = dayData;
+        }
+
+        return days;
+    }
+
+    private HourData[] getHourDetails(String jsonData) throws JSONException{
+        JSONObject forecast = new JSONObject(jsonData);
+        String timezone = forecast.getString("timezone");
+        JSONObject hourly = forecast.getJSONObject("hourly");
+        JSONArray hourdatas = hourly.getJSONArray("data");
+
+        HourData[] hours = new HourData[hourdatas.length()];
+        for (int i = 0; i < hourdatas.length(); i++) {
+            JSONObject jsonHour = hourdatas.getJSONObject(i);
+            HourData hourData = new HourData();
+            hourData.setSummary(jsonHour.getString("summary"));
+            hourData.setTemperature(jsonHour.getDouble("temperature"));
+            hourData.setIcon(jsonHour.getString("icon"));
+            hourData.setTime(jsonHour.getLong("time"));
+            hourData.setSummary(timezone);
+            hours[i] = hourData;
+        }
+        return hours;
     }
 
     private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
@@ -222,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         currentWeather.setTime(currenly.getLong("time"));
         currentWeather.setIcon(currenly.getString("icon"));
         currentWeather.setPrecipChance(currenly.getDouble("precipProbability"));
+        Log.i(TAG, currentWeather.getPrecipChance() + "");
         currentWeather.setSummary(currenly.getString("summary"));
         currentWeather.setTemperature(currenly.getDouble("temperature"));
         currentWeather.setTimeZone(timezone);
@@ -317,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 Log.e(TAG, e.getMessage());
             }
 
-            if (addresses.size() > 0) {
+            if (addresses != null && addresses.size() > 0) {
                 Address address = addresses.get(0);
                 cityName = address.getLocality();
             }
