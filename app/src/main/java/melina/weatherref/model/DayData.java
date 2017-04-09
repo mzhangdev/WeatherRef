@@ -1,5 +1,11 @@
 package melina.weatherref.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
+import melina.weatherref.R;
+
 /**
  * Created by melina on 4/7/17.
  */
@@ -7,7 +13,7 @@ package melina.weatherref.model;
 public class DayData {
     private long mTime;
     private String mSummary;
-    private double mTemperature;
+    private double mTemperatureMax;
     private String mIcon;
     private String mTimezone;
 
@@ -27,12 +33,12 @@ public class DayData {
         mSummary = summary;
     }
 
-    public double getTemperature() {
-        return mTemperature;
+    public int getTemperatureMax() {
+        return (int)Math.round(mTemperatureMax);
     }
 
-    public void setTemperature(double temperature) {
-        mTemperature = temperature;
+    public void setTemperatureMax(double temperature) {
+        mTemperatureMax = temperature;
     }
 
     public String getIcon() {
@@ -49,5 +55,16 @@ public class DayData {
 
     public void setTimezone(String timezone) {
         mTimezone = timezone;
+    }
+
+    public int getIconId() {
+        return Forecast.getIconId(mIcon);
+    }
+
+    public String getDayOfTheWeek() {
+        SimpleDateFormat formatter = new SimpleDateFormat("EEEE");
+        formatter.setTimeZone(TimeZone.getTimeZone(mTimezone));
+        Date dateTime = new Date(mTime * 1000);
+        return formatter.format(dateTime);
     }
 }

@@ -1,6 +1,7 @@
 package melina.weatherref.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -37,6 +38,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import melina.weatherref.R;
 import melina.weatherref.model.CurrentWeather;
 import melina.weatherref.model.DayData;
@@ -54,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private Forecast mForecast;
     private GoogleApiClient mGoogleApiClient;
-    private LocationManager mLocationManager = null;
     private LocationRequest mLocationRequest = null;
     private Location location = null;
     private String cityName = null;
@@ -71,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @BindView(R.id.summaryLabel) TextView mSummaryLabel;
     @BindView(R.id.iconImageView) ImageView mIconImageView;
     @BindView(R.id.locationLabel) TextView mLocationLabel;
-    //@BindView(R.id.refreshImageView) ImageView mRefreshImageView;
     @BindView(R.id.progressBar) ProgressBar mProgressbar;
 
     @Override
@@ -87,13 +87,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .addApi(LocationServices.API)
                 .build();
         mGoogleApiClient.connect();
-
-        /*mRefreshImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getForecast();
-            }
-        });*/
 
         Log.d(TAG, "Main UI code is running!");
 
@@ -197,10 +190,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private void toggleRefresh() {
         if (mProgressbar.getVisibility() == View.INVISIBLE) {
             mProgressbar.setVisibility(View.VISIBLE);
-            //mRefreshImageView.setVisibility(View.INVISIBLE);
         } else {
             mProgressbar.setVisibility(View.INVISIBLE);
-            //mRefreshImageView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -239,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             JSONObject jsonDay = daydatas.getJSONObject(i);
             DayData dayData = new DayData();
             dayData.setSummary(jsonDay.getString("summary"));
-            dayData.setTemperature(jsonDay.getDouble("temperatureMax"));
+            dayData.setTemperatureMax(jsonDay.getDouble("temperatureMax"));
             dayData.setIcon(jsonDay.getString("icon"));
             dayData.setTime(jsonDay.getLong("time"));
             dayData.setSummary(timezone);
@@ -313,10 +304,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         Log.i(TAG, "Location services connected.");
 
         startLocationUpdates();
-        /* location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (location != null) {
-            getForecast();
-        } */
     }
 
     @Override
@@ -401,5 +388,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @OnClick(R.id.dailyButton)
+    public void startDailyActiity(View view) {
+        Intent intent = new Intent(this, DailyForecastActivity.class);
+        startActivity(intent);
     }
 }
