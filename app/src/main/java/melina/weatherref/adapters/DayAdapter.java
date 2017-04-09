@@ -2,6 +2,7 @@ package melina.weatherref.adapters;
 
 import android.content.Context;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class DayAdapter extends BaseAdapter {
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
             holder.temperatureLabel = (TextView) convertView.findViewById(R.id.temperatureLabel);
             holder.dayLabel = (TextView) convertView.findViewById(R.id.dayNameLabel);
+            holder.circleImageView = (ImageView) convertView.findViewById(R.id.circleImageView);
 
             convertView.setTag(holder);
         } else {
@@ -60,11 +62,14 @@ public class DayAdapter extends BaseAdapter {
         holder.iconImageView.setImageResource(day.getIconId());
         holder.temperatureLabel.setText(day.getTemperatureMax() + "");
         holder.dayLabel.setText(day.getDayOfTheWeek());
-        return null;
+        holder.circleImageView.setImageResource(R.drawable.bg_temperature);
+
+        return convertView;
     }
 
     private static class ViewHolder {
         ImageView iconImageView;
+        ImageView circleImageView;
         TextView temperatureLabel;
         TextView dayLabel;
     }

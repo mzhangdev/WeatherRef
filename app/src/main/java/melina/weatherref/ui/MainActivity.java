@@ -53,6 +53,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String DAILY_FORECAST = "DAILY_FORECAST";
 
     private Forecast mForecast;
     private GoogleApiClient mGoogleApiClient;
@@ -233,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             dayData.setTemperatureMax(jsonDay.getDouble("temperatureMax"));
             dayData.setIcon(jsonDay.getString("icon"));
             dayData.setTime(jsonDay.getLong("time"));
-            dayData.setSummary(timezone);
+            dayData.setTimezone(timezone);
             days[i] = dayData;
         }
 
@@ -393,6 +394,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @OnClick(R.id.dailyButton)
     public void startDailyActiity(View view) {
         Intent intent = new Intent(this, DailyForecastActivity.class);
+        intent.putExtra(DAILY_FORECAST, mForecast.getDayDatas());
+
         startActivity(intent);
     }
 }
