@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final String DAILY_FORECAST = "DAILY_FORECAST";
+    public static final String CURRENT_LOCATOIN = "CURRENT_LOCATOIN";
 
     private Forecast mForecast;
     private GoogleApiClient mGoogleApiClient;
@@ -395,6 +396,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void startDailyActiity(View view) {
         Intent intent = new Intent(this, DailyForecastActivity.class);
         intent.putExtra(DAILY_FORECAST, mForecast.getDayDatas());
+        intent.putExtra(CURRENT_LOCATOIN, cityName);
 
         startActivity(intent);
     }

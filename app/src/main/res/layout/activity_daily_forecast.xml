@@ -14,13 +14,35 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="melina.weatherref.ui.DailyForecastActivity">
 
+    <TextView
+        android:text="This week's weather:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/thisWeekLabel"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        android:layout_marginTop="16dp"/>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@android:id/list"/>
+        android:id="@android:id/list"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_below="@+id/thisWeekLabel"
+        android:layout_above="@+id/locationLabel"/>
+
+    <TextView
+        android:text="__"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/locationLabel"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"/>
 
     <TextView
         android:text="@string/no_daily_forecast_data"
