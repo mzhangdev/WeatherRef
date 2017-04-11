@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final String DAILY_FORECAST = "DAILY_FORECAST";
+    public static final String HOURLY_FORECAST = "HOURLY_FORECAST";
     public static final String CURRENT_LOCATOIN = "CURRENT_LOCATOIN";
 
     private Forecast mForecast;
@@ -256,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             hourData.setTemperature(jsonHour.getDouble("temperature"));
             hourData.setIcon(jsonHour.getString("icon"));
             hourData.setTime(jsonHour.getLong("time"));
-            hourData.setSummary(timezone);
+            hourData.setTimeZone(timezone);
             hours[i] = hourData;
         }
         return hours;
@@ -396,6 +397,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void startDailyActiity(View view) {
         Intent intent = new Intent(this, DailyForecastActivity.class);
         intent.putExtra(DAILY_FORECAST, mForecast.getDayDatas());
+        intent.putExtra(CURRENT_LOCATOIN, cityName);
+
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.hourlyButton)
+    public void startHourlyActiity(View view) {
+        Intent intent = new Intent(this, HourlyForecastActivity.class);
+        intent.putExtra(HOURLY_FORECAST, mForecast.getHourDatas());
         intent.putExtra(CURRENT_LOCATOIN, cityName);
 
         startActivity(intent);

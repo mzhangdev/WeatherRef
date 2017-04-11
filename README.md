@@ -1,10 +1,10 @@
 # WeatherRef
-An Android application which adopts MVC pattern and supports showing the local weather.
+An Android application which shows the current and predicted weather, and refreshes the data automatically..
 
 ### Demo
 ![myimage-alt-tag](WeatherRef.gif)
 
 ### Functionalities:
-- Used OkHttp for transmitting network data.
-- Used Google Maps API to get user's location.
-- Used RESTful API from forecast.io to get weather data, and JSONObject to parse the returning JSON data.
+- Used Google Maps API to get user's location & address asynchronously, and requested location updates every certain time interval.
+- Used OkHttp for transmitting network data, RESTful API from forecast.io for getting weather data.
+- Customized ListView and ViewHolder to present weather prediction of the following hours and days.
