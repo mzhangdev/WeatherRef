@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import melina.weatherref.R;
 import melina.weatherref.model.HourData;
@@ -18,8 +19,10 @@ import melina.weatherref.model.HourData;
 
 public class HourAdapter extends RecyclerView.Adapter<HourAdapter.HourViewHolder> {
     private HourData[] mHourDatas;
+    private Context mContext;
 
-    public HourAdapter(HourData[] hourDatas) {
+    public HourAdapter(Context context, HourData[] hourDatas) {
+        mContext = context;
         mHourDatas = hourDatas;
     }
 
@@ -42,7 +45,7 @@ public class HourAdapter extends RecyclerView.Adapter<HourAdapter.HourViewHolder
         return mHourDatas.length;
     }
 
-    public class HourViewHolder extends RecyclerView.ViewHolder {
+    public class HourViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mTimeLabel;
         public TextView mSummaryLabel;
         public TextView mTemperatureLabel;
@@ -57,6 +60,8 @@ public class HourAdapter extends RecyclerView.Adapter<HourAdapter.HourViewHolder
             mTemperatureLabel = (TextView) itemView.findViewById(R.id.temperatureLabel);
             mIconImageView = (ImageView) itemView.findViewById(R.id.iconImageView);
             mCircleImageView = (ImageView) itemView.findViewById(R.id.circleImageView);
+
+            itemView.setOnClickListener(this);
         }
 
         public void bindHour(HourData hourData) {
@@ -65,6 +70,19 @@ public class HourAdapter extends RecyclerView.Adapter<HourAdapter.HourViewHolder
             mTemperatureLabel.setText(hourData.getTemperature()+ "");
             mIconImageView.setImageResource(R.drawable.bg_temperature);
             mIconImageView.setImageResource(hourData.getIconId());
+        }
+
+        @Override
+        public void onClick(View v) {
+            String time = mTimeLabel.getText().toString();
+            String temperature = mTemperatureLabel.getText().toString();
+            String summery = mSummaryLabel.getText().toString();
+            String message = String.format("At %s,/nThe temperature will be %s, /nAnd it will be %s",
+                    time,
+                    temperature,
+                    summery);
+            Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
+
         }
     }
 }
